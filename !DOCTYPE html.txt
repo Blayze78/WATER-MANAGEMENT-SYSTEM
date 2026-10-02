@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MajiTrack - Campus Water</title>
+<style>
+ body{font-family:Arial; background:#f0f8ff; margin:0; padding:15px}
+ .card{background:white; border-radius:15px; padding:15px; margin-bottom:15px; box-shadow:0 2px 5px #ccc}
+ .bar{height:20px; background:#eee; border-radius:10px; overflow:hidden}
+ .fill{height:100%; background:#00b894; width:70%}
+ .red{background:#d63031} .green{background:#00b894}
+ button{background:#0984e3; color:white; border:none; padding:12px; border-radius:10px; width:100%; font-size:16px}
+ input,select,textarea{width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc}
+</style>
+</head>
+<body>
+<h2>🚰 MajiTrack</h2>
+<p>Nairobi Campus Water System</p>
+<div class="card">
+ <h3>Tank Level - Block C</h3>
+ <div class="bar"><div id="levelFill" class="fill"></div></div>
+ <p id="levelText">70% - Good</p>
+</div>
+<div class="card">
+ <h3>Your Bill</h3>
+ <input id="stuId" placeholder="Enter Student ID e.g STU001" value="STU001">
+ <button onclick="checkBill()">Check Bill</button>
+ <p id="billResult">Used: 120L | Bill: 600 KES</p>
+</div>
+<div class="card">
+ <h3>Raise Ticket 🎫</h3>
+ <select id="type"><option>No water</option><option>Leakage</option><option>Dirty water</option><option>Low pressure</option></select>
+ <select id="block"><option>Block A</option><option>Block B</option><option>Block C</option></select>
+ <textarea id="desc" placeholder="Describe problem..."></textarea>
+ <button onclick="raiseTicket()">Submit Ticket</button>
+ <p id="ticketMsg"></p>
+</div>
+<script>
+let level = 70;
+document.getElementById('levelFill').style.width = level + '%';
+function checkBill(){
+  let sid = document.getElementById('stuId').value;
+  let liters = Math.floor(Math.random()*200);
+  document.getElementById('billResult').innerText = sid + ' | Used: ' + liters + 'L | Bill: ' + (liters*5) + ' KES';
+}
+function raiseTicket(){
+  let data = {student_id: document.getElementById('stuId').value, type: document.getElementById('type').value, block: document.getElementById('block').value, desc: document.getElementById('desc').value};
+  let tickets = JSON.parse(localStorage.getItem('tickets')||'[]');
+  tickets.push(data);
+  localStorage.setItem('tickets', JSON.stringify(tickets));
+  document.getElementById('ticketMsg').innerText = '✅ Ticket raised for ' + data.block;
+}
+</script>
+</body>
+</html>
